@@ -3,8 +3,8 @@
     <div class="container-fluid">
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">TRANSAKSI</h1>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                Tambah Layanan
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tambahModal">
+                Tambah Transaksi
             </button>
         </div>
         <div class="card shadow mb-4">
@@ -26,83 +26,198 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>1992/06/21</td>
-                                <td>Cuci & Setrika</td>
-                                <td>5 kg</td>
-                                <td>Bimlemk</td>
-                                <td>Lagi Dijempumt</td>
-                                <td><a class="btn btn-sm btn-warning">Edit</a>
-                                    <a class="btn btn-sm btn-danger">Hapus</a>
-                                </td>
-                            </tr>
+                            @foreach ($Transaksis as $item)
+                                <tr>
+                                    <td>{{ $item->id }}</td>
+                                    <td>{{ $item->created_at }}</td>
+                                    <td>{{ $item->layanan }}</td>
+                                    <td>{{ $item->berat }}</td>
+                                    <td>{{ $item->nama_pelanggan }}</td>
+                                    <td>{{ $item->keterangan }}</td>
+                                    <td>
+                                        <button type="button" data-toggle="modal" data-target="#editModal{{ $item->id }}"
+                                            class="btn btn-sm btn-warning">Edit</button>
+
+                                        <form id="delete-form-{{ $item->id }}" action="/transaksi/delete/{{ $item->id }}"
+                                            method="POST" style="display: inline;">
+                                            @csrf
+                                            <button type="button" class="btn btn-sm btn-danger"
+                                                onclick="confirmDelete({{ $item->id }})">Hapus</button>
+                                        </form>
+                                    </td>
+                                </tr>
+
+                                <!-- Modal Edit untuk setiap item -->
+                                <div class="modal fade" id="editModal{{ $item->id }}" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Edit Data</h5>
+                                                <button type="button" class="close" data-dismiss="modal">
+                                                    <span>&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="/transaksi/update/{{ $item->id }}" method="POST">
+                                                    @csrf
+                                                    <div class="form-group">
+                                                        <label>Tanggal Transaksi</label>
+                                                        <input type="date" name="created_at" class="form-control"
+                                                            value="{{ $item->created_at->format('Y-m-d') }}">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Layanan</label>
+                                                        <select class="custom-select" name="layanan">
+                                                            @foreach ($Layanans as $layanan)
+                                                                <option value="{{ $layanan->nama_layanan }}" {{ $item->layanan == $layanan->nama_layanan ? 'selected' : '' }}>
+                                                                    {{ $layanan->nama_layanan }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Berat</label>
+                                                        <div class="input-group">
+                                                            <input type="number" name="berat" class="form-control"
+                                                                value="{{ $item->berat }}">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">Kg</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Nama Pelanggan</label>
+                                                        <input type="text" name="nama_pelanggan" class="form-control"
+                                                            value="{{ $item->nama_pelanggan }}">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Keterangan</label>
+                                                        <select class="form-control" name="keterangan">
+                                                            <option value="Pending" {{ $item->keterangan == 'Pending' ? 'selected' : '' }}>Pending</option>
+                                                            <option value="Proses" {{ $item->keterangan == 'Proses' ? 'selected' : '' }}>Proses</option>
+                                                            <option value="Selesai" {{ $item->keterangan == 'Selesai' ? 'selected' : '' }}>Selesai</option>
+                                                            <option value="Diambil" {{ $item->keterangan == 'Diambil' ? 'selected' : '' }}>Diambil</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Batal</button>
+                                                        <button type="submit" class="btn btn-primary">Simpan</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+    <!--Tambah-Modal-->
+    <div class="modal fade" id="tambahModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <h5 class="modal-title">Tambah Data</h5>
+                    <button type="button" class="close" data-dismiss="modal">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form>
-                        <form>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Tanggal Transaksi</label>
-                                <div class="input-group">
-                                    <input type="date" class="form-control" aria-label="Tanggal"
-                                        placeholder="Masukkan Tanggal Transaksi">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                                    </div>
+                    <form action="/transaksi/store" method="POST">
+                        @csrf
+                        <div class="form-group">
+                            <label>Tanggal Transaksi</label>
+                            <div class="input-group">
+                                <input type="date" class="form-control" name="created_at" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                                 </div>
                             </div>
-                             <div class="form-group">
-                                <label for="exampleFormControlSelect1">Layanan</label>
-                                <select class="custom-select" id="exampleFormControlSelect1">
-                                    <option selected>--Pilih--</option>
-                                    <option>Cuci Kering</option>
-                                    <option>Setrika</option>
-                                    <option>Cuci Basah</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="harga">Berat</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" aria-label="Kg" placeholder="Masukkan Berat">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">Kg</span>
-                                    </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Layanan</label>
+                            <select class="custom-select" name="layanan" required>
+                                <option value="">--Pilih--</option>
+                                @foreach ($Layanans as $layanan)
+                                    <option value="{{ $layanan->nama_layanan }}">{{ $layanan->nama_layanan }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Berat</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="berat" step="0.01" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">Kg</span>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Nama Pelanggan</label>
-                                <input type="text" class="form-control" id="pelanggan" aria-describedby="emailHelp"
-                                    required>
-
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleFormControlSelect1">Keterangan</label>
-                                <select class="form-control" id="exampleFormControlSelect1">
-                                    <option>Proses</option>
-                                    <option>Selesai</option>
-                                </select>
-                            </div>
-                        </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-primary">Simpan</button>
+                        </div>
+                        <div class="form-group">
+                            <label>Nama Pelanggan</label>
+                            <input type="text" class="form-control" name="nama_pelanggan" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Keterangan</label>
+                            <select class="form-control" name="keterangan">
+                                <option value="Pending" {{ $item->keterangan == 'Pending' ? 'selected' : '' }}>Pending
+                                </option>
+                                <option value="Proses" {{ $item->keterangan == 'Proses' ? 'selected' : '' }}>Proses</option>
+                                <option value="Selesai" {{ $item->keterangan == 'Selesai' ? 'selected' : '' }}>Selesai
+                                </option>
+                                <option value="Diambil" {{ $item->keterangan == 'Diambil' ? 'selected' : '' }}>Diambil
+                                </option>
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+    
+@section('scripts')
+    @if(session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: "{{ session('success') }}",
+            showConfirmButton: false,
+            timer: 1800
+        });
+    </script>
+    @endif
+
+    <script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable();
+    });
+
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: "Data yang dihapus tidak dapat dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-form-' + id).submit();
+            }
+        });
+    }
+    </script>
+@endsection
+
 @endsection

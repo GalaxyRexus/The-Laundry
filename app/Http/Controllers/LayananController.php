@@ -3,23 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Transaksi;
 use App\Models\Layanan;
 
-class BerandaController extends Controller
+class LayananController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $Transaksis = Transaksi::all();
         $Layanans = Layanan::all();
-        $totalLayanan = Layanan::count();
-        $totalTransaksi = Transaksi::count();
-
-        return view('dashboard.beranda', compact('Transaksis', 'Layanans', 'totalLayanan', 'totalTransaksi'));
-        
+        return view('layanan.layanan', compact('Layanans'));
     }
 
     /**
@@ -35,7 +29,12 @@ class BerandaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Layanan::create([
+            'nama_layanan' => $request->nama_layanan,
+            'deskripsi' => $request->deskripsi,
+            'harga_satuan' => $request->harga_satuan,
+        ]);
+           return redirect('/layanan')->with('success', 'Data berhasil ditambahkan!');
     }
 
     /**
@@ -59,7 +58,12 @@ class BerandaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $layanan = Layanan::find($id);
+        $layanan->nama_layanan = $request->nama_layanan;
+        $layanan->deskripsi = $request->deskripsi;
+        $layanan->harga_satuan = $request->harga_satuan;
+        $layanan->save();
+        return redirect('/layanan')->with('success','Data berhasil diupdate!');
     }
 
     /**
@@ -67,6 +71,7 @@ class BerandaController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $deleted = Layanan::where('id', $id)->delete();
+        return redirect('/layanan')->with('success','Data berhasil dihapus!');
     }
 }

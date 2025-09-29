@@ -15,8 +15,8 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                        Earnings (Monthly)</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+                                       Total Transaksi</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalTransaksi }}</div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -33,8 +33,8 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                        Earnings (Annual)</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+                                        Jumlah Layanan</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{$totalLayanan}}</div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -92,36 +92,108 @@
                 </div>
             </div>
             <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Transaksi Hari Ini</h6>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                            <thead>
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Transaksi Hari Ini</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Tanggal Transaki</th>
+                                <th>Layanan</th>
+                                <th>Berat</th>
+                                <th>Nama Pelanggan</th>
+                                <th>Keterangan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($Transaksis as $item)
                                 <tr>
-                                    <th>No</th>
-                                    <th>Tanggal Transaksi</th>
-                                    <th>Layanan</th>
-                                    <th>Banyaknya</th>
-                                    <th>Nama Pelanggan</th>
-                                    <th>Keterangan</th>
+                                    <td>{{ $item->id }}</td>
+                                    <td>{{ $item->created_at }}</td>
+                                    <td>{{ $item->layanan }}</td>
+                                    <td>{{ $item->berat }}</td>
+                                    <td>{{ $item->nama_pelanggan }}</td>
+                                    <td>{{ $item->keterangan }}</td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>2011/04/25</td>
-                                    <td>Cuci Setrika</td>
-                                    <td>6 kg</td>
-                                    <td>Edinburgh</td>
-                                    <td>Proses</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+
+                                <!-- Modal Edit untuk setiap item -->
+                                <div class="modal fade" id="editModal{{ $item->id }}" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Edit Data</h5>
+                                                <button type="button" class="close" data-dismiss="modal">
+                                                    <span>&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="/transaksi/update/{{ $item->id }}" method="POST">
+                                                    @csrf
+                                                    <div class="form-group">
+                                                        <label>Tanggal Transaksi</label>
+                                                        <input type="date" name="created_at" class="form-control"
+                                                            value="{{ $item->created_at->format('Y-m-d') }}">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Layanan</label>
+                                                        <select class="custom-select" name="layanan">
+                                                            @foreach ($Layanans as $layanan)
+                                                                <option value="{{ $layanan->nama_layanan }}" {{ $item->layanan == $layanan->nama_layanan ? 'selected' : '' }}>
+                                                                    {{ $layanan->nama_layanan }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Berat</label>
+                                                        <div class="input-group">
+                                                            <input type="number" name="berat" class="form-control"
+                                                                value="{{ $item->berat }}">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">Kg</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Nama Pelanggan</label>
+                                                        <input type="text" name="nama_pelanggan" class="form-control"
+                                                            value="{{ $item->nama_pelanggan }}">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Keterangan</label>
+                                                        <select class="form-control" name="keterangan">
+                                                            <option value="Pending" {{ $item->keterangan == 'Pending' ? 'selected' : '' }}>Pending</option>
+                                                            <option value="Proses" {{ $item->keterangan == 'Proses' ? 'selected' : '' }}>Proses</option>
+                                                            <option value="Selesai" {{ $item->keterangan == 'Selesai' ? 'selected' : '' }}>Selesai</option>
+                                                            <option value="Diambil" {{ $item->keterangan == 'Diambil' ? 'selected' : '' }}>Diambil</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Batal</button>
+                                                        <button type="submit" class="btn btn-primary">Simpan</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+        </div>
     </div>
+    @section('scripts')
+    <script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable();
+    });
+    </script>
+@endsection
 @endsection

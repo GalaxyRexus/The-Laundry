@@ -19,6 +19,8 @@
 
     <!-- Custom styles for this template-->
     <link href="sbadmin2/css/sb-admin-2.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
 </head>
 
@@ -87,7 +89,7 @@
                     </ul>
                 </nav>
                 <!-- Begin Page Content -->
-                @yield('isi');
+                @yield('isi')
             </div>
             <!-- End of Main Content -->
 
@@ -130,23 +132,31 @@
         </div>
     </div>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="sbadmin2/vendor/jquery/jquery.min.js"></script>
-    <script src="sbadmin2/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+     <!-- jQuery HARUS PERTAMA -->
+<script src="sbadmin2/vendor/jquery/jquery.min.js"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="sbadmin2/vendor/jquery-easing/jquery.easing.min.js"></script>
+<!-- SweetAlert2 SETELAH jQuery -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="sbadmin2/js/sb-admin-2.min.js"></script>
+<!-- Bootstrap dan script lainnya -->
+<script src="sbadmin2/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Page level plugins -->
-    <script src="sbadmin2/vendor/chart.js/Chart.min.js"></script>
+<!-- Core plugin JavaScript-->
+<script src="sbadmin2/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-    <!-- Page level custom scripts -->
-    <script src="sbadmin2/js/demo/chart-area-demo.js"></script>
-    <script src="sbadmin2/js/demo/chart-pie-demo.js"></script>
+<!-- Custom scripts for all pages-->
+<script src="sbadmin2/js/sb-admin-2.min.js"></script>
 
+<!-- Page level plugins -->
+<script src="sbadmin2/vendor/chart.js/Chart.min.js"></script>
+
+<!-- Page level custom scripts -->
+<script src="sbadmin2/js/demo/chart-area-demo.js"></script>
+<script src="sbadmin2/js/demo/chart-pie-demo.js"></script>
+
+@yield('scripts')
 </body>
 
 </html>
