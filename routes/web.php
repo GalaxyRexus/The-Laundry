@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BerandaController;
 use App\Http\Controllers\LayananController;
 use App\Http\Controllers\TransaksiController;
+use App\Http\Controllers\LaporanController;
 
 Route::get('/', [BerandaController::class, 'index']);
 Route::get('/layanan', [LayananController::class, 'index']);
@@ -18,3 +19,5 @@ Route::post('/layanan/delete/{id}', [LayananController::class, 'destroy']);
 
 Route::get('/layanan/export', [LayananController::class, 'export']);
 Route::post('/layanan/import', [LayananController::class, 'import']);
+
+Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.laporan' );

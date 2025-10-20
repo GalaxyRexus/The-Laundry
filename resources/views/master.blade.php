@@ -60,13 +60,12 @@
                     <i class="fas fa-clipboard-list"></i>
                     <span>Transaksi</span></a>
             </li>
-
-            <!-- Nav Item - Tables -->
-
-            <!-- Divider -->
+            <li class="nav-item">
+                <a class="nav-link" href="/laporan">
+                    <i class="fas fa-swatchbook"></i>
+                    <span>Laporan</span></a>
+            </li>
             <hr class="sidebar-divider d-none d-md-block">
-
-            <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
