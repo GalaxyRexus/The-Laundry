@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\LayananExport;
+use App\Imports\LayananImport;
 use Illuminate\Http\Request;
 use App\Models\Layanan;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class LayananController extends Controller
 {
@@ -37,6 +41,22 @@ class LayananController extends Controller
            return redirect('/layanan')->with('success', 'Data berhasil ditambahkan!');
     }
 
+   public function export()
+    {
+        return Excel::download(new LayananExport, 'layanan.xlsx');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xls,xlsx'
+        ]);
+
+        $file = $request->file('file');
+        Excel::import(new LayananImport(), $file);
+
+        return redirect('/layanan')->with('success', 'Data berhasil diimport!');
+    }
     /**
      * Display the specified resource.
      */

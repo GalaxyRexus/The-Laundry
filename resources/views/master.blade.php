@@ -52,12 +52,12 @@
             <!-- Nav Item - Charts -->
             <li class="nav-item">
                 <a class="nav-link" href="/layanan">
-                    <i class="fas fa-fw fa-chart-area"></i>
+                    <i class="fas fa-shopping-basket"></i>
                     <span>Layanan</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/transaksi">
-                    <i class="fas fa-fw fa-chart-area"></i>
+                    <i class="fas fa-clipboard-list"></i>
                     <span>Transaksi</span></a>
             </li>
 

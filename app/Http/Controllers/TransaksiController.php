@@ -34,7 +34,7 @@ class TransaksiController extends Controller
     public function store(Request $request)
     {
         Transaksi::create([
-            'created_at' => now(),
+            'created_at' => $request->created_at,
             'layanan' => $request->layanan,
             'berat' => $request->berat,
             'nama_pelanggan' => $request->nama_pelanggan,
@@ -65,6 +65,7 @@ class TransaksiController extends Controller
     public function update(Request $request, string $id)
     {
         $transaksi = Transaksi::find($id);
+        $transaksi->created_at = $request->created_at;
         $transaksi->layanan = $request->layanan;
         $transaksi->berat = $request->berat;
         $transaksi->nama_pelanggan = $request->nama_pelanggan;

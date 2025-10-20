@@ -4,7 +4,7 @@
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">TRANSAKSI</h1>
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tambahModal">
-                Tambah Transaksi
+                <i class="fas fa-plus"></i> Tambah Transaksi
             </button>
         </div>
         <div class="card shadow mb-4">
@@ -28,21 +28,21 @@
                         <tbody>
                             @foreach ($Transaksis as $item)
                                 <tr>
-                                    <td>{{ $item->id }}</td>
-                                    <td>{{ $item->created_at }}</td>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $item->created_at->format('d-m-Y') }}</td>
                                     <td>{{ $item->layanan }}</td>
                                     <td>{{ $item->berat }}</td>
                                     <td>{{ $item->nama_pelanggan }}</td>
                                     <td>{{ $item->keterangan }}</td>
                                     <td>
                                         <button type="button" data-toggle="modal" data-target="#editModal{{ $item->id }}"
-                                            class="btn btn-sm btn-warning">Edit</button>
+                                            class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
 
                                         <form id="delete-form-{{ $item->id }}" action="/transaksi/delete/{{ $item->id }}"
                                             method="POST" style="display: inline;">
                                             @csrf
                                             <button type="button" class="btn btn-sm btn-danger"
-                                                onclick="confirmDelete({{ $item->id }})">Hapus</button>
+                                                onclick="confirmDelete({{ $item->id }})"> <i class="fas fa-solid fa-trash"></i></button>
                                         </form>
                                     </td>
                                 </tr>
@@ -122,7 +122,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Tambah Data</h5>
+                    <h5 class="modal-title">Tambah Transaksi</h5>
                     <button type="button" class="close" data-dismiss="modal">
                         <span aria-hidden="true">&times;</span>
                     </button>

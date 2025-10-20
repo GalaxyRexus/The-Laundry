@@ -12,5 +12,5 @@ class Transaksi extends Model
         'created_at' => 'datetime',
     ];
 
-    protected $fillable = ['layanan', 'berat', 'nama_pelanggan', 'keterangan'];
+    protected $fillable = ['created_at','layanan', 'berat', 'nama_pelanggan', 'keterangan'];
 }

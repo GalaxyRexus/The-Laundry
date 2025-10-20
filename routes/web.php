@@ -15,3 +15,6 @@ Route::post('/transaksi/delete/{id}', [TransaksiController::class, 'destroy']);
 Route::post('/layanan/store', [LayananController::class, 'store']);
 Route::post('/layanan/update/{id}', [LayananController::class, 'update']);
 Route::post('/layanan/delete/{id}', [LayananController::class, 'destroy']);
+
+Route::get('/layanan/export', [LayananController::class, 'export']);
+Route::post('/layanan/import', [LayananController::class, 'import']);

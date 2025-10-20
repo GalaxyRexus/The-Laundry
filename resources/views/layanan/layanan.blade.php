@@ -3,12 +3,20 @@
     <div class="container-fluid">
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">LAYANAN</h1>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tambahModal">
-                <i class="fas fa-plus">
-                     Tambah Layanan
-                </i>
-               
-            </button>
+
+            <div>
+                <a href="/layanan/export" class="btn btn-success mr-2">
+                    <i class="fas fa-file-excel"></i> Export Excel
+                </a>
+
+                <button type="button" class="btn btn-info mr-2" data-toggle="modal" data-target="#importModal">
+                    <i class="fas fa-file-import"></i> Import Excel
+                </button>
+
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tambahModal">
+                    <i class="fas fa-plus"></i> Tambah Layanan
+                </button>
+            </div>
         </div>
         <div class="card shadow mb-4">
             <div class="card-header py-3">
@@ -29,19 +37,19 @@
                         <tbody>
                             @foreach ($Layanans as $item)
                                 <tr>
-                                    <td>{{ $item->id }}</td>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->nama_layanan }}</td>
                                     <td>{{ $item->deskripsi }}</td>
                                     <td>{{ $item->harga_satuan }}</td>
                                     <td>
                                         <button type="button" data-toggle="modal" data-target="#editModal{{ $item->id }}"
-                                            class="btn btn-sm btn-warning">Edit</button>
+                                            class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
                                         <form id="delete-form-{{ $item->id }}" action="/layanan/delete/{{ $item->id }}"
                                             method="POST" style="display: inline;">
                                             @csrf
                                             <button type="button" class="btn btn-sm btn-danger"
                                                 onclick="confirmDelete({{ $item->id }})">
-                                                Hapus
+                                                <i class="fas fa-solid fa-trash"></i>
                                             </button>
                                         </form>
                                     </td>
@@ -99,7 +107,32 @@
     </div>
 
 
-
+<!-- Import Modal -->
+    <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form action="/layanan/import" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Import Layanan (Excel)</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Pastikan File Excel Memiliki Kolom: <strong>nama_layanan, deskripsi, harga_satuan</strong></p>
+                        <div class="form-group">
+                            <input type="file" name="file" accept=".xlsx,.xls,.csv" required class="form-control-file">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Import</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!--Tambah-Modal-->
     <div class="modal fade" id="tambahModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -143,43 +176,40 @@
             </div>
         </div>
     </div>
-// ...existing code...
-@section('scripts')
-    @if(session('success'))
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: 'Berhasil!',
-            text: "{{ session('success') }}",
-            showConfirmButton: false,
-            timer: 1800
-        });
-    </script>
-    @endif
+    @section('scripts')
+        @if(session('success'))
+            <script>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: "{{ session('success') }}",
+                    showConfirmButton: false,
+                    timer: 1800
+                });
+            </script>
+        @endif
 
-    <script>
-    $(document).ready(function() {
-        $('#dataTable').DataTable();
-    });
+        <script>
+            $(document).ready(function () {
+                $('#dataTable').DataTable();
+            });
 
-    function confirmDelete(id) {
-        Swal.fire({
-            title: 'Apakah Anda yakin?',
-            text: "Data yang dihapus tidak dapat dikembalikan!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Ya, Hapus!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('delete-form-' + id).submit();
+            function confirmDelete(id) {
+                Swal.fire({
+                    title: 'Apakah Anda yakin?',
+                    text: "Data yang dihapus tidak dapat dikembalikan!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Ya, Hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('delete-form-' + id).submit();
+                    }
+                });
             }
-        });
-    }
-    </script>
-@endsection
-// ...existing code...
-
+        </script>
+    @endsection
 @endsection
