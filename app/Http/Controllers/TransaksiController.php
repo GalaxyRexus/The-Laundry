@@ -19,8 +19,8 @@ class TransaksiController extends Controller
     $Transaksis = Transaksi::all();
     $Layanans = Layanan::all();
     $keteranganOptions = ['Pending', 'Proses', 'Selesai', 'Diambil'];
-    $total_harga = Layanan::where('nama_layanan', $Transaksis->layanan)->value('harga_satuan') * $Transaksis->berat;
-    return view('transaksi.transaksi', compact('Transaksis', 'Layanans', 'keteranganOptions', 'total_harga'));
+    
+    return view('transaksi.transaksi', compact('Transaksis', 'Layanans', 'keteranganOptions'));
 }
 
 public function print($id)

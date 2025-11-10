@@ -30,7 +30,7 @@
                                 <th>No</th>
                                 <th>Tanggal Transaki</th>
                                 <th>Layanan</th>
-                                <th>Berat</th>
+                                <th>Total Harga</th>
                                 <th>Nama Pelanggan</th>
                                 <th>Keterangan</th>
                                 <th>Aksi</th>
@@ -42,7 +42,7 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->created_at->format('d-m-Y') }}</td>
                                     <td>{{ $item->layanan }}</td>
-                                    <td>{{ $item->total_harga }}Kg</td>
+                                    <td>Rp{{ $item->total_harga }}</td>
                                     <td>{{ $item->nama_pelanggan }}</td>
                                     <td>{{ $item->keterangan }}</td>
                                     <td>

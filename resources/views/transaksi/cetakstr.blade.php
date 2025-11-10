@@ -93,7 +93,7 @@
 <div class="receipt">
 
     <div class="receipt-header">
-        <h3>Laundry Bersih &amp; Wangi</h3>
+        <h3>Laundry Bersih Wangi</h3>
         <small>Jl. Galugung No. 8 – Tejo</small>
         <div class="divider"></div>
         <p class="mb-0 fw-bold">Struk Transaksi</p>
@@ -112,7 +112,7 @@
     </div>
 
     <div class="footer">
-        <p>Terima kasih telah menggunakan jasa kami 💧</p>
+        <p>Terima kasih telah menggunakan jasa kami</p>
         <b>© Cendy Alviano SiLaundry 2025</b>
         <button class="btn btn-dark btn-sm no-print" onclick="window.print()">
             🖨 Cetak Struk
