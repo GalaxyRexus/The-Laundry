@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Transaksi;
 use App\Models\Layanan;
+use App\Exports\TransaksiExport;
+use App\Imports\TransaksiImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TransaksiController extends Controller
 {
@@ -16,8 +19,15 @@ class TransaksiController extends Controller
     $Transaksis = Transaksi::all();
     $Layanans = Layanan::all();
     $keteranganOptions = ['Pending', 'Proses', 'Selesai', 'Diambil'];
-    
-    return view('transaksi.transaksi', compact('Transaksis', 'Layanans', 'keteranganOptions'));
+    $total_harga = Layanan::where('nama_layanan', $Transaksis->layanan)->value('harga_satuan') * $Transaksis->berat;
+    return view('transaksi.transaksi', compact('Transaksis', 'Layanans', 'keteranganOptions', 'total_harga'));
+}
+
+public function print($id)
+{
+    $transaksi = Transaksi::find($id);
+    $total_harga = Layanan::where('nama_layanan', $transaksi->layanan)->value('harga_satuan') * $transaksi->berat;
+    return view('transaksi.cetakstr', compact('transaksi', 'total_harga'));
 }
 
     /**
@@ -26,6 +36,19 @@ class TransaksiController extends Controller
     public function create()
     {
         //
+    }
+    public function export()
+    {
+        return Excel::download(new TransaksiExport, 'transaksi.xlsx');
+    }
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xls,xlsx'
+        ]);
+
+        Excel::import(new TransaksiImport, $request->file('file')->store('temp'));
+        return redirect('/transaksi')->with('success', 'Data berhasil diimport!');
     }
 
     /**

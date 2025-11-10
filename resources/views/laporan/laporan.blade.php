@@ -54,7 +54,7 @@
                                             <td>{{ $key + 1 }}</td>
                                             <td>
                                                 {{ $item->created_at
-                                                    ? \Carbon\Carbon::parse($item->created_at)->format('d-m-Y H:i')
+                                                    ? \Carbon\Carbon::parse($item->created_at)->format('d-m-Y')
                                                     : '-' }}
                                             </td>
                                             <td>{{ $item->layanan_nama ?? $item->layanan }}</td>

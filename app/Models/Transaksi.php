@@ -11,6 +11,10 @@ class Transaksi extends Model
      protected $casts = [
         'created_at' => 'datetime',
     ];
-
+public function getTotalHargaAttribute()
+{
+    $harga_satuan = Layanan::where('nama_layanan', $this->layanan)->value('harga_satuan') ?? 0;
+    return $harga_satuan * $this->berat;
+}
     protected $fillable = ['created_at','layanan', 'berat', 'nama_pelanggan', 'keterangan'];
 }
